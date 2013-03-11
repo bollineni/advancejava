@@ -55,13 +55,13 @@ public class HiddenForm extends HttpServlet {
 		
 		out.println("<html>");
 		out.println("<head> <title>Hidden Form Fields</title> </head>");
-		out.println("<body> <form action='hiddenForm' method='GET'> " +
+		out.println("<body> <form action='hiddenForm' method='POST'> " +
 				"First Name: <input type='text' name='fname'> <br /> " +
 				"Last Name: <input type='text' name='lname' /> " +
 				"<input type='submit' value='Submit' /> " +
 				"<a href='/adv_java_servlet/hiddenForm?myUniquieID=78656483'> My HREF</a>");
 				
-			out.println("<input type='hidden' name='myUniquieID' value='"+myuniqueValue+"'/></form> </body> </html>");
+		out.println("<input type='hidden' name='myUniquieID' value='"+myuniqueValue+"'/></form> </body> </html>");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

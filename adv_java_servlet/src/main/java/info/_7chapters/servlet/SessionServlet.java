@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,12 +14,17 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet(name="SessionServlet" ,description = "SessionServlet", urlPatterns = { "/SessionServlet" })
 public class SessionServlet extends HttpServlet {
-	public void doGet(HttpServletRequest request,
+	
+	@Override
+	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response)
 					throws ServletException, IOException
 					{
 		// Create a session object if it is already not  created.
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(true);
+		
+		ServletContext context = getServletContext();
+		
 		session.setMaxInactiveInterval(10); // in seconds
 		
 		// Get session creation time.
@@ -27,28 +33,48 @@ public class SessionServlet extends HttpServlet {
 		Date lastAccessTime = 
 				new Date(session.getLastAccessedTime());
 
-		String title = "Welcome Back to my website";
+		String title ="";
 		Integer visitCount = new Integer(0);
+		Integer requestCount = new Integer(0);
 		String visitCountKey = new String("visitCount");
 		String userIDKey = new String("userID");
 		String userID = new String("ABCD");
 
 		// Check if this is new comer on your web page.
 		if (session.isNew()){
+			
 			title = "Welcome to my website";
 			session.setAttribute(userIDKey, userID);
+			
+			requestCount = (Integer)context.getAttribute("totalRequestServed");
+			requestCount = (requestCount != null ? requestCount : 0) + 1;
+			//RequestDispatcher
 		} else {
+			title = "Welcome Back to my website";
 			visitCount = (Integer)session.getAttribute(visitCountKey);
 			visitCount = (visitCount != null ? visitCount : 0) + 1;
 			userID = (String)session.getAttribute(userIDKey);
+			
+			requestCount = (Integer)context.getAttribute("totalRequestServed");
+			requestCount = (requestCount != null ? requestCount : 0) + 1;
+			
+			
 		}
-		session.setAttribute(visitCountKey,  visitCount);
+		session.setAttribute(visitCountKey,  visitCount); // 1
+		context.setAttribute("totalRequestServed", requestCount);
 
 		String logoutRequest = request.getParameter("logout");
 		System.out.println("SessionServlet.doGet() logoutRequest :: "+ logoutRequest);
 
 		if("logout".equals(logoutRequest)){
+			title = "Good Bye";
+			System.out.println("Logging Out");
 			session.invalidate();
+//			session.removeAttribute(arg0);
+//			context.removeAttribute("totalRequestServed");
+			
+//			session.setAttribute(visitCountKey,  new Integer(0));
+			visitCount = new Integer(0);
 		}
 
 
@@ -90,6 +116,9 @@ public class SessionServlet extends HttpServlet {
 				"<tr>\n" +
 				"  <td>Number of visits</td>\n" +
 				"  <td>" + visitCount + "</td></tr>\n" +
+				"<tr>\n" +
+				"  <td>Total Request Served</td>\n" +
+				"  <td>" + requestCount + "</td></tr>\n" +
 				"</table>\n" +
 				logout+
 				"</body></html>");

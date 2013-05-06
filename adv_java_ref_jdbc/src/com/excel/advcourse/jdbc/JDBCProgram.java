@@ -2,7 +2,6 @@ package com.excel.advcourse.jdbc;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,15 +31,15 @@ public class JDBCProgram {
 	public static void main(String ...arg) throws Exception {
 //		new JDBCProgram().selectQuery(100);
 //		new JDBCProgram().preparedStatement(100,"Steven");
-//				new JDBCProgram().createTable();
-//				new JDBCProgram().createProcedureShowEmployees();
-//				new JDBCProgram().callProcedure();
-//				new JDBCProgram().insertRowInDBAndRollBack(28, "28");
-//				new JDBCProgram().savePoint();
-//				new JDBCProgram().addBatch();
+//		new JDBCProgram().createTable();
+//		new JDBCProgram().createProcedureShowEmployees();
+//		new JDBCProgram().callProcedure();
+//		new JDBCProgram().insertRowInDBAndRollBack(28, "28");
+//		new JDBCProgram().savePoint();
+		new JDBCProgram().addBatch();
 	}
 
-	static{
+	static {
 		if(log.isDebugEnabled())
 			log.debug("Loading Driver....");
 
@@ -48,7 +47,7 @@ public class JDBCProgram {
 			log.info("Loading Driver....");
 
 		try{
-			Class.forName(driver);//Loading a driver...
+			Class.forName(driver);//Loading a driver... Step 1
 
 			//			Driver myDriver = new oracle.jdbc.driver.OracleDriver(); 	
 			//			DriverManager.registerDriver( myDriver );
@@ -59,13 +58,49 @@ public class JDBCProgram {
 		}
 
 		try{
-			con = DriverManager.getConnection(connectionURL,"hr","hr");
+			con = DriverManager.getConnection(connectionURL,"HR","HR"); // Step 2
 		}catch(Exception exp){
 			exp.printStackTrace();
 		}
 	}
 
+	/**
+	 * @param args
+	 * Statement
+	 */
+	public void selectQuery(int empid) {
+		try{
+			stmt = con.createStatement(); // Step 3
+			rs = stmt.executeQuery("select * from employees where employee_id = "+empid); // Step 4
+			while(rs.next()){
+				System.out.println(rs.getString(1) +" "+rs.getString("first_name") + " "+ rs.getString("last_name"));
+			}
 
+		}catch(SQLException exp){
+			exp.printStackTrace();
+		}finally{
+			closeConnections(rs,stmt,con);
+		}
+	}
+	/*
+	 * 
+	 */
+	public void preparedStatement(int empid,String name){
+		try{
+			pstmt = con.prepareStatement("select * from employees where employee_id = ? and first_name = ?");
+			pstmt.setInt(1, empid);
+			pstmt.setString(2, name);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				System.out.println(rs.getString("first_name") + " "+ rs.getString("last_name") +" "+ rs.getString(1));
+			}
+		}catch(SQLException exp){
+			exp.printStackTrace();
+		}finally{
+			closeConnections(rs,stmt,con);
+		}
+	}
 	/**
 	 * 
 	 */
@@ -110,7 +145,7 @@ public class JDBCProgram {
 			Statement stmt = con.createStatement(); //set a Savepoint 
 
 			savepoint1 = con.setSavepoint("Savepoint1"); 
-			String SQL = "INSERT INTO MYEXCEL " + "VALUES (106, 'Rita6')";
+			String SQL = "INSERT INTO MYEXCEL VALUES (106, 'Rita6')";
 
 
 			stmt.executeUpdate(SQL); //Submit a malformed SQL statement that breaks String SQL = "INSERTED IN Employees " + "VALUES (107, 22, 'Sita', 'Tez')"; stmt.executeUpdate(SQL); // If there is no error, commit the changes. conn.commit();
@@ -139,7 +174,7 @@ public class JDBCProgram {
 		try{
 			con.setAutoCommit(false);
 
-			pstmt = con.prepareStatement("insert into myExcel values(?,?)");
+			pstmt = con.prepareStatement("insert into MYEXCEL values(?,?)");
 
 			pstmt.setInt(1, id);
 			pstmt.setString(2, name);
@@ -180,52 +215,14 @@ public class JDBCProgram {
 			closeConnections(rs,stmt,con);
 		}
 	}
-
-	/**
-	 * @param args
-	 * Statement
-	 */
-	public void selectQuery(int empid) {
-		try{
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("select * from employees where employee_id = "+empid);
-			while(rs.next()){
-				System.out.println(rs.getString("first_name") + " "+ rs.getString("last_name") +" "+ rs.getString(1));
-			}
-
-		}catch(SQLException exp){
-			exp.printStackTrace();
-		}finally{
-			closeConnections(rs,stmt,con);
-		}
-	}
-
-	/*
-	 * 
-	 */
-	public void preparedStatement(int empid,String name){
-		try{
-			pstmt = con.prepareStatement("select * from employees where employee_id = ? and first_name = ?");
-			pstmt.setInt(1, empid);
-			pstmt.setString(2, name);
-			
-			rs = pstmt.executeQuery();
-			while(rs.next()){
-				System.out.println(rs.getString("first_name") + " "+ rs.getString("last_name") +" "+ rs.getString(1));
-			}
-		}catch(SQLException exp){
-			exp.printStackTrace();
-		}finally{
-			closeConnections(rs,stmt,con);
-		}
-	}
+	
 	/**
 	 * 
 	 */
 	public void createTable() {
 		try{
 			stmt = con.createStatement();
-			boolean isExecuted = stmt.execute("create table MyExcel(id number(4) , name varchar2(20))");
+			boolean isExecuted = stmt.execute("create table MYEXCEL(id number(4) , name varchar2(20))");
 			System.out.println("Table got created..."+ isExecuted);
 		}catch(SQLException exp){
 			exp.printStackTrace();

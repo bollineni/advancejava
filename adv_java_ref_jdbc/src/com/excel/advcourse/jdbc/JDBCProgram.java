@@ -29,14 +29,14 @@ public class JDBCProgram {
 	 * MAIN METHOD
 	 */
 	public static void main(String ...arg) throws Exception {
-//		new JDBCProgram().selectQuery(100);
-//		new JDBCProgram().preparedStatement(100,"Steven");
-//		new JDBCProgram().createTable();
-//		new JDBCProgram().createProcedureShowEmployees();
-//		new JDBCProgram().callProcedure();
-//		new JDBCProgram().insertRowInDBAndRollBack(28, "28");
-//		new JDBCProgram().savePoint();
-		new JDBCProgram().addBatch();
+		//		new JDBCProgram().selectQuery(100);
+		//		new JDBCProgram().preparedStatement(100,"Steven");
+		//		new JDBCProgram().createTable();
+//				new JDBCProgram().createProcedureShowEmployees();
+				new JDBCProgram().callProcedure();
+		//		new JDBCProgram().insertRowInDBAndRollBack(28, "28");
+		//		new JDBCProgram().savePoint();
+//		new JDBCProgram().addBatch();
 	}
 
 	static {
@@ -90,7 +90,7 @@ public class JDBCProgram {
 			pstmt = con.prepareStatement("select * from employees where employee_id = ? and first_name = ?");
 			pstmt.setInt(1, empid);
 			pstmt.setString(2, name);
-			
+
 			rs = pstmt.executeQuery();
 			while(rs.next()){
 				System.out.println(rs.getString("first_name") + " "+ rs.getString("last_name") +" "+ rs.getString(1));
@@ -154,7 +154,7 @@ public class JDBCProgram {
 			String SQL2 = "INSERT INTO MYEXCEL " + "VALUES (107, 'Rita7')";
 
 			stmt.executeUpdate(SQL2);
-			
+
 			int i = 4/0;
 		}catch(Exception se){ // If there is any error. 
 			try{
@@ -178,15 +178,15 @@ public class JDBCProgram {
 
 			pstmt.setInt(1, id);
 			pstmt.setString(2, name);
-			
-//			pstmt.setInt(1, Integer.parseInt(id+"a"));
-//			pstmt.setString(2, name+"1");
+
+			//			pstmt.setInt(1, Integer.parseInt(id+"a"));
+			//			pstmt.setString(2, name+"1");
 
 			int intValue = pstmt.executeUpdate();
-			
+
 			log.info("Return value from insert "+ intValue);
 			int i = 4/0;
-			
+
 			con.commit();
 		}catch(Exception exp){
 			exp.printStackTrace();
@@ -215,7 +215,7 @@ public class JDBCProgram {
 			closeConnections(rs,stmt,con);
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -245,7 +245,7 @@ public class JDBCProgram {
 			exp.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -253,14 +253,14 @@ public class JDBCProgram {
 		try{
 			cs = con.prepareCall("{call SHOW_EMPLOYEES(?,?)}");
 
-			cs.setString(1, "Nancy");
-			cs.registerOutParameter(2, Types.INTEGER);
-			
+			cs.setInt(1, 100);
+			cs.registerOutParameter(2, Types.VARCHAR);
+
 			cs.executeQuery();
 
-			int empid = cs.getInt(2);
+			String empName = cs.getString(2);
 
-			System.out.println("JDBCProgram.callProcedure()"+ empid);
+			System.out.println("JDBCProgram.callProcedure()"+ empName);
 		}catch(Exception exp){
 			exp.printStackTrace();
 		}finally{
@@ -278,12 +278,11 @@ public class JDBCProgram {
 				"DROP PROCEDURE  SHOW_EMPLOYEES";
 
 		createProcedure =
-				"create procedure SHOW_EMPLOYEES(out myLN) IS " +
-						"begin " +
-						"SELECT EMP.LAST_NAME into myLN FROM EMPLOYEES EMP , DEPARTMENTS DEPT" +
-						" where dept.department_id = emp.department_id"+
-						" and EMP.first_NAME ='Nancy';"+
-						" end;";
+				"CREATE OR REPLACE PROCEDURE SHOW_EMPLOYEES ( EID_IN IN NUMBER , EMP_NAME OUT VARCHAR2) "+
+						"AS "+
+						"BEGIN "+
+						"SELECT EMP.FIRST_NAME INTO EMP_NAME FROM EMPLOYEES EMP WHERE EMP.EMPLOYEE_ID = EID_IN; "+  
+						"END;";
 		//		Statement stmt = null;
 		//		Statement stmtDrop = null;
 		//		try {

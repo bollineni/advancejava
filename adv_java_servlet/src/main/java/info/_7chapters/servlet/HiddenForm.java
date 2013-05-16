@@ -44,7 +44,7 @@ public class HiddenForm extends HttpServlet {
 		String myuniqueID = request.getParameter("myUniquieID");
 		String myuniqueValue = "78656483";
 		
-		if(myuniqueValue.equals(myuniqueID)){
+		if("78656483".equals(myuniqueID)){
 			out.println("<h1> Existing Client</h1>");
 			out.println("<h1>" + message + "</h1>");
 			out.println("<h1>" + fname + " "+ lname+ "</h1>");
@@ -52,14 +52,14 @@ public class HiddenForm extends HttpServlet {
 		}else{
 			out.println("<h1> New Client </h1>");
 		}
-		
+		System.out.println("request.getContextPath() " + request.getContextPath());
 		out.println("<html>");
 		out.println("<head> <title>Hidden Form Fields</title> </head>");
 		out.println("<body> <form action='hiddenForm' method='POST'> " +
 				"First Name: <input type='text' name='fname'> <br /> " +
 				"Last Name: <input type='text' name='lname' /> " +
 				"<input type='submit' value='Submit' /> " +
-				"<a href='/adv_java_servlet/hiddenForm?myUniquieID=78656483'> My HREF</a>");
+				"<a href='"+request.getContextPath()+"/hiddenForm?myUniquieID=78656483'> My HREF</a>");
 				
 		out.println("<input type='hidden' name='myUniquieID' value='"+myuniqueValue+"'/></form> </body> </html>");
 	}

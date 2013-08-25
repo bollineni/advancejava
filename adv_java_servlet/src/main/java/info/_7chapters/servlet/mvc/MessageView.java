@@ -50,9 +50,7 @@ public class MessageView extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		
-		out.println("<h1>" + message + "</h1>");
-		out.println("<h1>" + fname + " "+ lname+ "</h1>");
-		out.println("<h1>I am in goGet</h1>");
+		out.println("<h1>" + fname + " "+ lname+ " Sucessfully saved in DB</h1>");
 	}
 
 	

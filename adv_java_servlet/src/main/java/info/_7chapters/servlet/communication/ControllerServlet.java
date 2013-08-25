@@ -27,22 +27,28 @@ public class ControllerServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
+//		response.setContentType("text/html");
 		
-		RequestDispatcher rd1 = request.getRequestDispatcher("header.jsp");
+		/*RequestDispatcher rd1 = request.getRequestDispatcher("header.jsp");
 		rd1.include(request, response);
 		
 		RequestDispatcher rd = request.getRequestDispatcher("AdditionServlet");
-		rd.include(request, response);
+		rd.forward(request, response);
 		
 		RequestDispatcher rd3 = request.getRequestDispatcher("footer.html");
 		rd3.include(request, response);
+		*/
+		int ffield = Integer.parseInt(request.getParameter("ffield"));
+		request.setAttribute("newValue", new Integer(ffield+5));
+		
+		RequestDispatcher rd = request.getRequestDispatcher("AdditionServlet");
+		rd.forward(request, response);
 		
 		//rd.forward(request, response);
 //		request.setAttribute("name", "Jayram");
 //		request.setAttribute("place", "HYD");
 		
-//		response.sendRedirect("AdditionServlet");
+//		response.sendRedirect("AdditionServlet?ffield="+request.getParameter("ffield")+"&sfield="+request.getParameter("sfield"));
 		
 	}
 }

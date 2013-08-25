@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class HelloWorld
  * @WebServlet(description = "My Hello World", urlPatterns = { "/HelloWorld" })
  */
-
+@WebServlet(description = "Hello Form", urlPatterns = { "/helloForm" })
 public class HelloForm extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	String message = "";
@@ -23,7 +24,7 @@ public class HelloForm extends HttpServlet {
 	
 	@Override
 	public void init() throws ServletException {
-		super.init();
+		System.out.println("In the init Method");
 	}
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
@@ -48,5 +49,9 @@ public class HelloForm extends HttpServlet {
 	                + request.getParameter("last_name") + "\n" +
 	                "</ul>\n" +
 	                "</body></html>");
+	}
+	@Override
+	public void destroy() {
+		System.out.println("In the destroy Method");
 	}
 }

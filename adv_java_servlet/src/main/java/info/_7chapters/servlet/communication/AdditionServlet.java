@@ -33,13 +33,15 @@ public class AdditionServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-//		int ffield = Integer.parseInt(request.getParameter("ffield"));
-//		int sfield = Integer.parseInt(request.getParameter("sfield"));
+		int ffield = (Integer)request.getAttribute("newValue");
+		
+		int sfield = Integer.parseInt(request.getParameter("sfield"));
 
-//		int value = ffield + sfield;
-//		out.println("The calucation in addition servlet "+value);
-//		String name = (String)request.getAttribute("name");
-		out.println("Hello I m here...again" );
+		int value = ffield + sfield;
+		out.println("<br>Addition value is : "+value+"<br>");
+		
+		/*String name = (String)request.getAttribute("name");
+		out.println("Hello I m here...again"  + name);*/
 	}
 
 }

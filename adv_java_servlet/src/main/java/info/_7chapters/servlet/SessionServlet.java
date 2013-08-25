@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet(name="SessionServlet" ,description = "SessionServlet", urlPatterns = { "/SessionServlet" })
 public class SessionServlet extends HttpServlet {
-	
+
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response)
@@ -22,11 +22,11 @@ public class SessionServlet extends HttpServlet {
 					{
 		// Create a session object if it is already not  created.
 		HttpSession session = request.getSession(true);
-		
+
 		ServletContext context = getServletContext();
-		
-		session.setMaxInactiveInterval(10); // in seconds
-		
+
+		session.setMaxInactiveInterval(60); // in seconds
+
 		// Get session creation time.
 		Date createTime = new Date(session.getCreationTime());
 		// Get last access time of this web page.
@@ -42,23 +42,23 @@ public class SessionServlet extends HttpServlet {
 
 		// Check if this is new comer on your web page.
 		if (session.isNew()){
-			
+
 			title = "Welcome to my website";
 			session.setAttribute(userIDKey, userID);
-			
+
 			requestCount = (Integer)context.getAttribute("totalRequestServed");
 			requestCount = (requestCount != null ? requestCount : 0) + 1;
 			//RequestDispatcher
 		} else {
-			title = "Welcome Back to my website";
+			title = "You are in the same Session !!!";
 			visitCount = (Integer)session.getAttribute(visitCountKey);
 			visitCount = (visitCount != null ? visitCount : 0) + 1;
 			userID = (String)session.getAttribute(userIDKey);
-			
+
 			requestCount = (Integer)context.getAttribute("totalRequestServed");
 			requestCount = (requestCount != null ? requestCount : 0) + 1;
-			
-			
+
+
 		}
 		session.setAttribute(visitCountKey,  visitCount); // 1
 		context.setAttribute("totalRequestServed", requestCount);
@@ -70,10 +70,10 @@ public class SessionServlet extends HttpServlet {
 			title = "Good Bye";
 			System.out.println("Logging Out");
 			session.invalidate();
-//			session.removeAttribute(arg0);
-//			context.removeAttribute("totalRequestServed");
-			
-//			session.setAttribute(visitCountKey,  new Integer(0));
+			//			session.removeAttribute(arg0);
+			//			context.removeAttribute("totalRequestServed");
+
+			//			session.setAttribute(visitCountKey,  new Integer(0));
 			visitCount = new Integer(0);
 		}
 

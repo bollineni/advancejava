@@ -31,13 +31,10 @@ public class DBController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	String message = "";
 
-	
-	
-
 	public DBController() {
 		message = "Hello Excel World";
 	}
-	
+
 	@Override
 	public void init() throws ServletException {
 		super.init();
@@ -45,30 +42,34 @@ public class DBController extends HttpServlet {
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		HttpSession session = request.getSession();
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		//		HttpSession session = request.getSession();
 		String fname = request.getParameter("fname");
 		String lname = request.getParameter("lname");
-		
+
 		try{
 			StudentDAO dao = new StudentDAO();
 			dao.insertStudentInfo(fname,lname);
-		}catch(Exception exp){
+		}catch(ClassNotFoundException exp){
 			exp.printStackTrace();
+			throw new ServletException(exp);
+		}catch(Exception ex){
+			 ex.printStackTrace();
+			 throw new ServletException(ex);
 		}
 
-		RequestDispatcher rd1 = request.getRequestDispatcher("MessageView");
+		RequestDispatcher rd1 = request.getRequestDispatcher("MessageView");// success.jsp
 		rd1.forward(request, response);
 	}
 
 	public void callMe(){}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		doGet(request, response);
 	}
 
-	
+
 
 
 }

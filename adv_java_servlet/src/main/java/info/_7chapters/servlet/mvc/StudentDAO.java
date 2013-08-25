@@ -18,12 +18,13 @@ public class StudentDAO {
 	ResultSet rs = null;
 	private static String driver = "oracle.jdbc.driver.OracleDriver";
 	static String connectionURL = "jdbc:oracle:thin:@localhost:1521/XE";
-	private void loadDriver(){
+	private void loadDriver() throws ClassNotFoundException{
 		try{
 			Class.forName(driver);
 		}catch(ClassNotFoundException exp){
 			exp.printStackTrace();
 			log.error("Issues in Class Not Found"+ exp.getMessage());
+			throw exp;
 		}
 	}
 	
@@ -36,7 +37,7 @@ public class StudentDAO {
 		return con;
 	}
 	
-	public void insertStudentInfo(String fname, String lname) throws Exception{
+	public void insertStudentInfo(String fname, String lname) throws Exception , ClassNotFoundException{
 		try{
 			loadDriver();
 			con = getConnection();
@@ -51,6 +52,8 @@ public class StudentDAO {
 			intValue = pstmt.executeUpdate();
 
 			log.info("Return value from insert "+ intValue);
+		}catch(ClassNotFoundException cnfe){
+			throw cnfe;
 		}catch(Exception exp){
 			exp.printStackTrace();
 			try{

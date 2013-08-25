@@ -31,7 +31,7 @@ public class MessageView extends HttpServlet {
 	String message = "";
 
 	public MessageView() {
-		message = "Hello Excel World";
+		message = "Hello Excel World Again";
 	}
 	
 	@Override

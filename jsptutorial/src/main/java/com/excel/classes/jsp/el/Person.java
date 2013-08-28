@@ -1,20 +1,21 @@
 package com.excel.classes.jsp.el;
 
 public class Person{
-	public String name;
-	public Address address;
+	private String name;
+	private Address address;
 	
-	public void setName(String name){
-		this.name = name;
-	}
-	public String getName(){
+	public String getName() {
 		return name;
 	}
-	
-	public void setAddress(Address address){
-		this.address = address; 
+	public void setName(String name) {
+		this.name = name;
 	}
-	public Address getAddress(){
+	public Address getAddress() { // address
 		return address;
 	}
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	
+	
 }

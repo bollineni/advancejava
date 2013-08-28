@@ -16,6 +16,6 @@ The second one is ${bigFive["1"]}<br>
 ${ 5 lt 0}
  --%>
 
-<c:out value="${bigFive}"></c:out>
-<c:out value="${bigFive[0]}"></c:out>
+<c:out value="${bigFive}"></c:out><br>
+<c:out value="${bigFive[0]}"></c:out><br>
 <c:out value="${bigFive['1']}"></c:out>

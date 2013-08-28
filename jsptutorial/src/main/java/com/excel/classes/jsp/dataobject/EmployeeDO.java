@@ -8,13 +8,13 @@ public class EmployeeDO implements Serializable{
 	private String lname;
 	private String email;
 	
-	public String getEmpid() {
+	public String getEmpid() { // empid
 		return empid;
 	}
 	public void setEmpid(String empid) {
 		this.empid = empid;
 	}
-	public String getFname() {
+	public String getFname() { //fname
 		return fname;
 	}
 	public void setFname(String fname) {
